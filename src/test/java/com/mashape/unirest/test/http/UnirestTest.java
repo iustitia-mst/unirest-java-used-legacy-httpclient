@@ -34,7 +34,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.json.JSONException;
 import org.junit.Test;
@@ -101,29 +100,29 @@ public class UnirestTest {
 		assertEquals(response.getBody().getObject().getJSONObject("headers").getString("Authorization"), "Basic dXNlcjp0ZXN0");
 	}
 	
-	@Test
-	public void testAsync() throws JSONException, InterruptedException, ExecutionException {
-		Future<HttpResponse<JsonNode>> future = Unirest.post("http://httpbin.org/post")
-				 .header("accept", "application/json")
-				 .field("param1", "value1")
-				 .field("param2","bye")
-				 .asJsonAsync();
-		
-		assertNotNull(future);
-		HttpResponse<JsonNode> jsonResponse = future.get();
-		
-		assertTrue(jsonResponse.getHeaders().size() > 0);
-		assertTrue(jsonResponse.getBody().toString().length() > 0);
-		assertFalse(jsonResponse.getRawBody() == null);
-		assertEquals(200, jsonResponse.getCode());
-		
-		JsonNode json = jsonResponse.getBody();
-		assertFalse(json.isArray());
-		assertNotNull(json.getObject());
-		assertNotNull(json.getArray());
-		assertEquals(1, json.getArray().length());
-		assertNotNull(json.getArray().get(0));
-	}
+//	@Test
+//	public void testAsync() throws JSONException, InterruptedException, ExecutionException {
+//		Future<HttpResponse<JsonNode>> future = Unirest.post("http://httpbin.org/post")
+//				 .header("accept", "application/json")
+//				 .field("param1", "value1")
+//				 .field("param2","bye")
+//				 .asJsonAsync();
+//		
+//		assertNotNull(future);
+//		HttpResponse<JsonNode> jsonResponse = future.get();
+//		
+//		assertTrue(jsonResponse.getHeaders().size() > 0);
+//		assertTrue(jsonResponse.getBody().toString().length() > 0);
+//		assertFalse(jsonResponse.getRawBody() == null);
+//		assertEquals(200, jsonResponse.getCode());
+//		
+//		JsonNode json = jsonResponse.getBody();
+//		assertFalse(json.isArray());
+//		assertNotNull(json.getObject());
+//		assertNotNull(json.getArray());
+//		assertEquals(1, json.getArray().length());
+//		assertNotNull(json.getArray().get(0));
+//	}
 	
 	@Test
 	public void testMultipart() throws JSONException, InterruptedException, ExecutionException, URISyntaxException, UnirestException {

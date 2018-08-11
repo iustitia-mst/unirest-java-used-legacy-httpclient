@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.client.HttpClient;
-import org.apache.http.nio.client.HttpAsyncClient;
+// import org.apache.http.nio.client.HttpAsyncClient;
 
 import com.mashape.unirest.http.options.Option;
 import com.mashape.unirest.http.options.Options;
@@ -79,9 +79,9 @@ public class Unirest {
 	/**
 	 * Set the asynchronous AbstractHttpAsyncClient implementation to use for every asynchronous request
 	 */
-	public static void setAsyncHttpClient(HttpAsyncClient asyncHttpClient) {
-		Options.setOption(Option.ASYNCHTTPCLIENT, asyncHttpClient);
-	}
+//	public static void setAsyncHttpClient(HttpAsyncClient asyncHttpClient) {
+//		Options.setOption(Option.ASYNCHTTPCLIENT, asyncHttpClient);
+//	}
 	
 	public static GetRequest get(String url) {
 		return new GetRequest(HttpMethod.GET, url);

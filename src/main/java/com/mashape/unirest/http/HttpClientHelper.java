@@ -39,10 +39,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.nio.client.HttpAsyncClient;
-import org.apache.http.nio.reactor.IOReactorStatus;
+//import org.apache.http.concurrent.FutureCallback;
+//import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+//import org.apache.http.nio.client.HttpAsyncClient;
+//import org.apache.http.nio.reactor.IOReactorStatus;
 
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -55,67 +55,67 @@ public class HttpClientHelper {
 
 	private static final String USER_AGENT = "unirest-java/1.1";
 	
-	private static <T> FutureCallback<org.apache.http.HttpResponse> prepareCallback(final Class<T> responseClass, final Callback<T> callback) {
-		if (callback == null) return null;
-		
-		return new FutureCallback<org.apache.http.HttpResponse>() {
-
-			public void cancelled() {
-				callback.cancelled();
-			}
-
-			public void completed(org.apache.http.HttpResponse arg0) {
-				callback.completed(new HttpResponse<T>(arg0, responseClass));
-			}
-
-			public void failed(Exception arg0) {
-				callback.failed(new UnirestException(arg0));
-			}
-			
-		};
-	}
+//	private static <T> FutureCallback<org.apache.http.HttpResponse> prepareCallback(final Class<T> responseClass, final Callback<T> callback) {
+//		if (callback == null) return null;
+//		
+//		return new FutureCallback<org.apache.http.HttpResponse>() {
+//
+//			public void cancelled() {
+//				callback.cancelled();
+//			}
+//
+//			public void completed(org.apache.http.HttpResponse arg0) {
+//				callback.completed(new HttpResponse<T>(arg0, responseClass));
+//			}
+//
+//			public void failed(Exception arg0) {
+//				callback.failed(new UnirestException(arg0));
+//			}
+//			
+//		};
+//	}
 	
-	@SuppressWarnings("deprecation")
-	public static <T> Future<HttpResponse<T>> requestAsync(HttpRequest request, final Class<T> responseClass, Callback<T> callback) {
-		HttpUriRequest requestObj = prepareRequest(request);
-		
-		HttpAsyncClient asyncHttpClient = ClientFactory.getAsyncHttpClient();
-		if (asyncHttpClient instanceof CloseableHttpAsyncClient) {
-			if (asyncHttpClient.getStatus() != IOReactorStatus.ACTIVE) {
-				asyncHttpClient.start();
-			}
-		}
-		
-		final Future<org.apache.http.HttpResponse> future = asyncHttpClient.execute(requestObj, prepareCallback(responseClass, callback));
-		
-		return new Future<HttpResponse<T>>() {
-
-			public boolean cancel(boolean mayInterruptIfRunning) {
-				return future.cancel(mayInterruptIfRunning);
-			}
-
-			public boolean isCancelled() {
-				return future.isCancelled();
-			}
-
-			public boolean isDone() {
-				return future.isDone();
-			}
-
-			public HttpResponse<T> get() throws InterruptedException,
-					ExecutionException {
-				org.apache.http.HttpResponse httpResponse = future.get();
-				return new HttpResponse<T>(httpResponse, responseClass);
-			}
-
-			public HttpResponse<T> get(long timeout, TimeUnit unit)
-					throws InterruptedException, ExecutionException,
-					TimeoutException {
-				org.apache.http.HttpResponse httpResponse = future.get(timeout, unit);
-				return new HttpResponse<T>(httpResponse, responseClass);
-			}
-		};
-	}
+// 	@SuppressWarnings("deprecation")
+// 	public static <T> Future<HttpResponse<T>> requestAsync(HttpRequest request, final Class<T> responseClass, Callback<T> callback) {
+//		HttpUriRequest requestObj = prepareRequest(request);
+//		
+//		HttpAsyncClient asyncHttpClient = ClientFactory.getAsyncHttpClient();
+//		if (asyncHttpClient instanceof CloseableHttpAsyncClient) {
+//			if (asyncHttpClient.getStatus() != IOReactorStatus.ACTIVE) {
+//				asyncHttpClient.start();
+//			}
+//		}
+//		
+//		final Future<org.apache.http.HttpResponse> future = asyncHttpClient.execute(requestObj, prepareCallback(responseClass, callback));
+//		
+//		return new Future<HttpResponse<T>>() {
+//
+//			public boolean cancel(boolean mayInterruptIfRunning) {
+//				return future.cancel(mayInterruptIfRunning);
+//			}
+//
+//			public boolean isCancelled() {
+//				return future.isCancelled();
+//			}
+//
+//			public boolean isDone() {
+//				return future.isDone();
+//			}
+//
+//			public HttpResponse<T> get() throws InterruptedException,
+//					ExecutionException {
+//				org.apache.http.HttpResponse httpResponse = future.get();
+//				return new HttpResponse<T>(httpResponse, responseClass);
+//			}
+//
+//			public HttpResponse<T> get(long timeout, TimeUnit unit)
+//					throws InterruptedException, ExecutionException,
+//					TimeoutException {
+//				org.apache.http.HttpResponse httpResponse = future.get(timeout, unit);
+//				return new HttpResponse<T>(httpResponse, responseClass);
+//			}
+//		};
+//	}
 	
 	public static <T> HttpResponse<T> request(HttpRequest request, Class<T> responseClass) throws UnirestException {
 		HttpUriRequest requestObj = prepareRequest(request);

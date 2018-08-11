@@ -1,12 +1,17 @@
 package com.mashape.unirest.http.options;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+//import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+//import org.apache.http.impl.nio.client.HttpAsyncClients;
+//import org.apache.http.nio.client.HttpAsyncClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 public class Options {
 
@@ -34,15 +39,20 @@ public class Options {
 		Object socketTimeout = Options.getOption(Option.SOCKET_TIMEOUT);
 		if (socketTimeout == null) socketTimeout = SOCKET_TIMEOUT;
 		
-		// Create common default configuration
-		RequestConfig clientConfig = RequestConfig.custom().setConnectTimeout(((Long) connectionTimeout).intValue()).setSocketTimeout(((Long) socketTimeout).intValue()).build();
+		HttpClient httpClient = new DefaultHttpClient();
+	  HttpParams params = httpClient.getParams();
+	  HttpConnectionParams.setConnectionTimeout(params, ((Long)connectionTimeout).intValue());
+	  HttpConnectionParams.setSoTimeout(params, ((Long)socketTimeout).intValue());
 		
 		// Create clients
-		setOption(Option.HTTPCLIENT, HttpClientBuilder.create().setDefaultRequestConfig(clientConfig).build());
+		setOption(Option.HTTPCLIENT, httpClient);
 		
-		CloseableHttpAsyncClient asyncClient = HttpAsyncClientBuilder.create().setDefaultRequestConfig(clientConfig).build();
+		// CloseableHttpAsyncClient asyncClient = HttpAsyncClients.createDefault();
+	  // HttpParams params2 = asyncClient.getParams();
+	  // HttpConnectionParams.setConnectionTimeout(params2, ((Long)connectionTimeout).intValue());
+	  // HttpConnectionParams.setSoTimeout(params2, ((Long)socketTimeout).intValue());
 		
-		setOption(Option.ASYNCHTTPCLIENT, asyncClient);
+		// setOption(Option.ASYNCHTTPCLIENT, asyncClient);
 	}
 	
 }

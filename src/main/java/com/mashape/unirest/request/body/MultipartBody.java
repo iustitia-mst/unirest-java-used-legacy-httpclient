@@ -33,14 +33,14 @@ import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 
 import com.mashape.unirest.http.utils.MapUtil;
 import com.mashape.unirest.request.BaseRequest;
 import com.mashape.unirest.request.HttpRequest;
+// import org.apache.http.entity.ContentType;
 
 public class MultipartBody extends BaseRequest implements Body {
 
@@ -72,16 +72,22 @@ public class MultipartBody extends BaseRequest implements Body {
 	
 	public HttpEntity getEntity() {
 		if (hasFile) {
-			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+			// MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+			MultipartEntity entity = new MultipartEntity();
 			for(Entry<String, Object> part : parameters.entrySet()) {
 				if (part.getValue() instanceof File) {
 					hasFile = true;
-					builder.addPart(part.getKey(), new FileBody((File) part.getValue()));
+					entity.addPart(part.getKey(), new FileBody((File) part.getValue()));
 				} else {
-					builder.addPart(part.getKey(), new StringBody(part.getValue().toString(), ContentType.APPLICATION_FORM_URLENCODED));
+					// entity.addPart(part.getKey(), new StringBody(part.getValue().toString(), ContentType.APPLICATION_FORM_URLENCODED));
+					try {
+						entity.addPart(part.getKey(), new StringBody(part.getValue().toString()));
+					} catch (UnsupportedEncodingException e) {
+						throw new RuntimeException(e);
+					}
 				}
 			}
-			return builder.build();
+			return entity;
 		} else {
 			try {
 				return new UrlEncodedFormEntity(MapUtil.getList(parameters), UTF_8);
