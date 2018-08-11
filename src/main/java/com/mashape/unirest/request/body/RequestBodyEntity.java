@@ -57,11 +57,11 @@ public class RequestBodyEntity extends BaseRequest implements Body {
 	}
 
 	public HttpEntity getEntity() {
-		try {
+		// try {
 			return new StringEntity(body.toString(), UTF_8);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		// } catch (UnsupportedEncodingException e) {
+		// 	throw new RuntimeException(e);
+		// }
 	}
 	
 }
